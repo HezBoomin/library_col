@@ -5,7 +5,7 @@ Here is the link to my [APP](https://library-collection.adaptable.app/main/)
 
 ## Answers
 
-### How do you implement the tasks in the checklist?
+### 1. How do you implement the tasks in the checklist?
 1. Create a new Django Project
     - To create a new Django Project first we need to create a virtual environment
     ```
@@ -40,6 +40,11 @@ Here is the link to my [APP](https://library-collection.adaptable.app/main/)
 7. Deploy the app to adaptable
     - Add, commit, push the project to a repository named library_col 
     - Deploy it in adaptable
+
+### 2. Create a diagram explaining the flow of client requests to a Django web app and its response.
+<img src="/assets/flowchart.png">
+
+### 3. What is the purpose of a virtual environment? Can we create a Django web app without a virtual environment?
 
     
 
