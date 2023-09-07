@@ -27,11 +27,11 @@ Here is the link to my [APP](https://library-collection.adaptable.app/main/)
     - in `urls.py` inside `library_col` add `path('main/', include('main.urls'))`
 4. Create a model on the `main` app with name `Item` and add some mandatory attributes
     - In `models.py` i add an app name `Item` with attributes such as:
-        -`name`
-        -`date_added`
-        -`amount`
-        -`description`
-        -`categories`
+        - `name`
+        - `date_added`
+        - `amount`
+        - `description`
+        - `categories`
 5. Create a function in `views.py` that returns an HTML template containing my application name, your name, and your class.
     - in `views.py` I add function `show_main` with context _application name_, _my name_, _my class_. Then render the context to `main.html`
     - In `main.html` I can call each item in context with `{{ name }}` for example. I added the 3 item
