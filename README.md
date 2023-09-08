@@ -45,6 +45,10 @@ Here is the link to my [APP](https://library-collection.adaptable.app/main/)
 <img src="/assets/flowchart.png">
 
 ### 3. What is the purpose of a virtual environment? Can we create a Django web app without a virtual environment?
+The purpose of virtual environment isolate the dependencies and libraries required for a specific project. It is possible to create a Django web without a virtual environment, but in some case it is better to use a virtual environment. For example in project A we use Django version 4.0 and we want to make project B with Django version 4.1. If we install Django without virtual environment, the Django will be updated to version 4.1 on project A. In such situations virtual environment can be really useful to maintain the dependencies of both projects.
+
+### 4. What is MVC, MVT, and MVVM? Explain the differences between the three.
+MVC is Model-View-Controller. In MVC, Model Stores data and application logic, View displays data from Model, and Controller Acts as an intermediary between the model and view. MVT is Model-View-Template. In MVT, Model Stores data and application logic, View displays data from Model and connects it to the template, and Template Determines the user interface's appearance. MVVM is Model-View-ViewModel. IN MVVM, Model Stores data and application logic, View displays data from Model, and ViewModel transforms data from the Model into a format that the View can easily display and interact with.MVC and MVT are similar, with the primary difference being the terminology used and the specific implementation details in their respective frameworks. MVVM introduces a clear separation between the View and ViewModel, with an emphasis on data binding and two-way communication between them.
 
     
 
