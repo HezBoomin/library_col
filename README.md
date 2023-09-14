@@ -84,7 +84,7 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
     Fetched `Item` objects and return as XML by using 
     ```py
     def show_xml(request):
-        data = Product.objects.all()
+        data = Item.objects.all()
         return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
     ```
     in `urls.py` inside `library_col` add `path('show_xml/', show_xml, name='show_xml'),`.
@@ -93,7 +93,7 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
     Fetched `Item` objects and return as XML by using 
     ```py
     def show_json(request):
-        data = Product.objects.all()
+        data = Item.objects.all()
         return HttpResponse(serializers.serialize("json", data), content_type="application/json")
     ```
     in `urls.py` inside `library_col` add `path('show_json/', show_json, name='show_json'),`.
@@ -102,7 +102,7 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
     Fetched `Item` objects and return as XML by using 
     ```py
     def show_xml_by_id(request, id):
-        data = Product.objects.filter(pk=id)
+        data = Item.objects.filter(pk=id)
         return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
     ```
     in `urls.py` inside `library_col` add `path('show_xml_by_id/', show_xml_by_id, name='show_xml_by_id'),`.
@@ -111,7 +111,7 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
     Fetched `Item` objects and return as XML by using 
     ```py
     def show_json_by_id(request, id):
-        data = Product.objects.filter(pk=id)
+        data = Item.objects.filter(pk=id)
         return HttpResponse(serializers.serialize("json", data), content_type="application/json")
     ```
     in `urls.py` inside `library_col` add `path('show_json_by_id/', show_json_by_id, name='show_json_by_id'),`.
