@@ -122,4 +122,122 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
 <img src="/assets/show_json.png">
 <img src="/assets/show_xml_by_id.png">
 <img src="/assets/show_json_by_id.png">
-        
+
+# Assignment 4
+
+## Answers
+
+# What is UserCreationForm in Django? Explain its advantages and disadvantages.
+Django UserCreationForm is used for creating a new user that can use our web application. It has three fields: username, password1, and password2(which is basically used for password confirmation). It advantage is really simple to use and have it's own template for the registration form. It disadvantage is it have limited fields. Suppose we want to send the verification mail to verify the User; we cannot do that because it doesn't have an email field.
+
+# What is the difference between authentication and authorization in Django application? Why are both important?
+Authentication verifies a user is who they claim to be, and authorization determines what an authenticated user is allowed to do. Authentication and authorization are two vital information security processes that administrators use to protect systems and information. Authentication verifies the identity of a user or service, and authorization determines their access rights.
+
+# What are cookies in website? How does Django use cookies to manage user session data?
+Cookies are text files with small pieces of data that are used to identify your computer as you use a network. Django uses a cookie containing a special session id to identify each browser and its associated session with the site. The actual session data is stored in the site database by default.
+
+# Are cookies secure to use? Is there potential risk to be aware of?
+Cookies themselves are not inherently secure or insecure; their security depends on how they are used and implemented. Cookies are small pieces of data that websites store on a user's device to track information or maintain session data. The potential risk is cybercriminals can steal sensitive data from cookies if the cookies are not secured.
+
+# Show information of logged-in user
+<img src="/assets/hez-login.png">
+<img src="/assets/bobi-login.png">
+
+# Explain how you implemented the checklist above step-by-step (not just following the tutorial).
+1. Create Register Form and Function
+
+    In  `views.py` import `Redirect`, `UserCreationForm`, and `Messages`. Create a `Register` function like the following code:
+    ```py
+    def register(request):
+        form = UserCreationForm()
+
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+        context = {'form':form}
+        return render(request, 'register.html', context)
+    ```
+    After creating the function, create a file called `register.html` in template folder inside the main folder to get the register data from the web. Create routing of this function in `urls.py`
+
+2. Create Login Form and Function and Add Lost Login Date to Cookies and Show the Last Login to the Main Page
+
+    In  `views.py` import `authenticate` and `login`. Create a `login_user` function that also get the last login date and add it cookie like the following code:
+    ```py
+    def login_user(request):
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main")) 
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+            else:
+                messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+        context = {}
+        return render(request, 'login.html', context)
+    ```
+    After creating the function, create a file called `login.html` in template folder inside the main folder toin views.py to login the user. We add `'last_login': request.COOKIES['last_login'],` to `context` to show the last login data in `main.html`. Create routing of this function in `urls.py`
+3. Create Logout Form and Function That Also Delete the Last Login From Cookie
+
+    in `views.py` import `logout`. Create a `logout_user` function that also delete the last login from cookie like the following code
+    ```py
+    def logout_user(request):
+        logout(request)
+        response = HttpResponseRedirect(reverse('main:login'))
+        response.delete_cookie('last_login')
+        return response
+    ```
+    Create routing of this function in `urls.py`. Add a `logout` button in `main.html` to logout the user
+
+4. Restricting Access to the Main Page if the User Didn't Login
+
+    in `views.py` import `login_required` the put `@login_required(login_url='/login')` above `show_main` function.
+
+5. Connect `Item` Model to `User` Model
+
+    in `models.py` import user, then add `user = models.ForeignKey(User, on_delete=models.CASCADE)` inside existing Item model. Modify `create-product` funtion set the `user` field to the `User` object associated with the currently logged-in user, indicating that the product belongs to that user with the following code:
+    ```py
+    def create_product(request):
+        form = ProductForm(request.POST or None)
+
+        if form.is_valid() and request.method == "POST":
+            product = form.save(commit=False)
+            product.user = request.user
+            product.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+    ```
+    In `show_main` function add `'name': request.user.username` to context. Save all changes and run the migrations for the model.
+
+6. Create 2 User with 3 Item per User
+
+    Just register and login to two user and input 3 data item in each account
+
+7. Make a Increment and Deacrement Button for Amount and Delete Button to Delete the Item
+
+    In `views.py` add the following code:
+    ```py
+    if request.method == 'POST':
+        if 'increment' in request.POST:
+            item_id = request.POST.get('increment')
+            item = items.get(id=item_id)
+            item.amount += 1
+            item.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        elif 'decrement' in request.POST:
+            item_id = request.POST.get('decrement')
+            item = items.get(id=item_id)
+            item.amount -= 1
+            item.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        elif 'delete' in request.POST:
+            item_id = request.POST.get('delete')
+            item = items.get(id=item_id)
+            item.delete()
+            return HttpResponseRedirect(reverse('main:show_main'))
+    ```
+    In `main.html` create a button to increment,decrement, and delete. `if request.method == 'POST':` This line checks if the HTTP request method used to access the view is POST. `if 'increment' in request.POST:`, `elif 'decrement' in request.POST:`, `elif 'delete' in request.POST:` Those lines  checks if the string `increment` or `decrement` or `delete` exists in the POST data. `item_id = request.POST.get('increment')` , `item_id = request.POST.get('decrement')`, and `item_id = request.POST.get('delete')` is for retrieves the value associated with the `increment`, `decrement`, `delete` button from the POST data when the button of each function is pressed. `item = items.get(id=item_id)` With the item's ID obtained from the POST data, this line fetches the corresponding item from the database. It uses the get method with the id field to retrieve the specific item.`item.amount += 1 and item.save()` to increment amount and save the data, `item.amount -= 1 and item.save()` to decrement amount and save the data, `item.delete()` to delete the item. `return HttpResponseRedirect(reverse('main:show_main'))` After processing the form submission and updating the item's amount, this line redirects the user to the `show_main` view. 
