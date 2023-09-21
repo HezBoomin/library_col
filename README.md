@@ -127,23 +127,23 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
 
 ## Answers
 
-# What is UserCreationForm in Django? Explain its advantages and disadvantages.
+### What is UserCreationForm in Django? Explain its advantages and disadvantages.
 Django UserCreationForm is used for creating a new user that can use our web application. It has three fields: username, password1, and password2(which is basically used for password confirmation). It advantage is really simple to use and have it's own template for the registration form. It disadvantage is it have limited fields. Suppose we want to send the verification mail to verify the User; we cannot do that because it doesn't have an email field.
 
-# What is the difference between authentication and authorization in Django application? Why are both important?
+### What is the difference between authentication and authorization in Django application? Why are both important?
 Authentication verifies a user is who they claim to be, and authorization determines what an authenticated user is allowed to do. Authentication and authorization are two vital information security processes that administrators use to protect systems and information. Authentication verifies the identity of a user or service, and authorization determines their access rights.
 
-# What are cookies in website? How does Django use cookies to manage user session data?
+### What are cookies in website? How does Django use cookies to manage user session data?
 Cookies are text files with small pieces of data that are used to identify your computer as you use a network. Django uses a cookie containing a special session id to identify each browser and its associated session with the site. The actual session data is stored in the site database by default.
 
-# Are cookies secure to use? Is there potential risk to be aware of?
+### Are cookies secure to use? Is there potential risk to be aware of?
 Cookies themselves are not inherently secure or insecure; their security depends on how they are used and implemented. Cookies are small pieces of data that websites store on a user's device to track information or maintain session data. The potential risk is cybercriminals can steal sensitive data from cookies if the cookies are not secured.
 
-# Show information of logged-in user
+### Show information of logged-in user
 <img src="/assets/hez-login.png">
 <img src="/assets/bobi-login.png">
 
-# Explain how you implemented the checklist above step-by-step (not just following the tutorial).
+### Explain how you implemented the checklist above step-by-step (not just following the tutorial).
 1. Create Register Form and Function
 
     In  `views.py` import `Redirect`, `UserCreationForm`, and `Messages`. Create a `Register` function like the following code:
