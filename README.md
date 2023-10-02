@@ -636,6 +636,5 @@ Tailwind is a css framework with extensive flexiblity and freedom. It's offer a 
     }
 
 </details>
-    ```
 
 
