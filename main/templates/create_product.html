@@ -1,19 +1,29 @@
 {% extends 'base.html' %} 
 
 {% block content %}
-<h1>Add New Product</h1>
 
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Product"/>
-            </td>
-        </tr>
-    </table>
-</form>
+<div class="login flex h-screen justify-center items-center">
+    <div class="flex-col item-center justify-center relative">
+        <div class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <h1 class="text-center text-4xl pb-3 pt-2">Add New Book</h1>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="grid grid-cols-4 gap-2">
+                    <label for="id_name" class="font-medium">Name:</label>
+                    <input type="text" name="name" maxlength="100" required id="id_name" class="form-control text-black">
+                    <label for="id_amount" class="font-medium">Amount:</label>
+                    <input type="text" name="amount" required id="id_amount" class="form-control text-black ">
+                    <label for="id_amount" class="font-medium">Description:</label>
+                    <textarea name="description" cols="40" rows="10" required id="id_description" class="form-control text-black "></textarea>
+                    <label for="id_category" class="font-medium">Category:</label>
+                    <input type="text" name="categories" maxlength="100" required id="id_category" class="form-control text-black ">
+                </div>
+                <div class="mr-5 py-2 pt-4">
+                    <input class="btn login_btn bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full" type="submit" value="Add Book">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

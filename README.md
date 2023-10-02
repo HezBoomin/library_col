@@ -1,3 +1,6 @@
+<details>
+<summary>Assignment 2</summary>
+
 # Assignment 2
 
 ## APP
@@ -49,6 +52,11 @@ The purpose of virtual environment isolate the dependencies and libraries requir
 
 ### 4. What is MVC, MVT, and MVVM? Explain the differences between the three.
 MVC is Model-View-Controller. In MVC, Model Stores data and application logic, View displays data from Model, and Controller Acts as an intermediary between the model and view. MVT is Model-View-Template. In MVT, Model Stores data and application logic, View displays data from Model and connects it to the template, and Template Determines the user interface's appearance. MVVM is Model-View-ViewModel. IN MVVM, Model Stores data and application logic, View displays data from Model, and ViewModel transforms data from the Model into a format that the View can easily display and interact with.MVC and MVT are similar, with the primary difference being the terminology used and the specific implementation details in their respective frameworks. MVVM introduces a clear separation between the View and ViewModel, with an emphasis on data binding and two-way communication between them.
+
+</details>
+
+<details>
+<summary>Assignment 3</summary>
 
 # Assignment 3
 
@@ -122,6 +130,11 @@ Many modern web applications use JSON because its simplicity, efficiency, compat
 <img src="/assets/show_json.png">
 <img src="/assets/show_xml_by_id.png">
 <img src="/assets/show_json_by_id.png">
+
+</details>
+
+<details>
+<summary>Assignment 4</summary>
 
 # Assignment 4
 
@@ -241,3 +254,388 @@ Cookies themselves are not inherently secure or insecure; their security depends
             return HttpResponseRedirect(reverse('main:show_main'))
     ```
     In `main.html` create a button to increment,decrement, and delete. `if request.method == 'POST':` This line checks if the HTTP request method used to access the view is POST. `if 'increment' in request.POST:`, `elif 'decrement' in request.POST:`, `elif 'delete' in request.POST:` Those lines  checks if the string `increment` or `decrement` or `delete` exists in the POST data. `item_id = request.POST.get('increment')` , `item_id = request.POST.get('decrement')`, and `item_id = request.POST.get('delete')` is for retrieves the value associated with the `increment`, `decrement`, `delete` button from the POST data when the button of each function is pressed. `item = items.get(id=item_id)` With the item's ID obtained from the POST data, this line fetches the corresponding item from the database. It uses the get method with the id field to retrieve the specific item.`item.amount += 1 and item.save()` to increment amount and save the data, `item.amount -= 1 and item.save()` to decrement amount and save the data, `item.delete()` to delete the item. `return HttpResponseRedirect(reverse('main:show_main'))` After processing the form submission and updating the item's amount, this line redirects the user to the `show_main` view. 
+
+</details>
+
+<details open>
+<summary>Assignment 5</summary>
+
+# Assignment 5
+
+## Answers
+
+### Explain the purpose of some CSS element selector and when to use it.
+
+1. Element Selector
+    The purpose is to Selects all HTML elements of a specific type. We use this selector when we want to apply a style to all instances of a particular HTML element throughout our website. Example: `p` selector targets all `<p>` (paragraph) elements.
+2. Class Selector
+    The purpose is to Selects elements with a specific class attribute value. We Use this selector when we want to apply a style to one or more elements with a specific class. Classes can be reused on multiple elements. Example: `.btn` selector targets all elements with `class="btn"`.
+3. ID Selector
+    The purpose is to  Selects a single element with a specific `id` attribute value. We use this selector when we want to target a unique element with a specific `id`. Example: `#header` selector targets the element with `id="header"`.
+
+### Explain some of the HTML5 tags that you know.
+
+- `<header>` : Represents the header of a document or a section.
+- `<svg>` : Embed SVG (Scalable Vector Graphics) content in an HTML document.
+- `<time>` : Represents a time and/or date.
+
+###  What are the differences between margin and padding?
+
+Padding represents the amount of inner space an element has, while the margin is whitespace available surrounding an element.
+
+### What are the differences between the CSS framework Tailwind and Bootstrap? When should we use Bootstrap rather than Tailwind, and vice versa?
+
+Tailwind is a css framework with extensive flexiblity and freedom. It's offer a lot of customization but has a steeper learning curve. Bootstrap provides a more opinionated and structured development experience with a wide range of pre-built components. It's not as flexible as bootstrap but it is really easy to get a grip of. We should use bootstrap when we want to make a simple website that doesn't require many customization for its css. We should use Tailwind if we want to make a more extensive website with a lot of customization on it's css.
+
+### Explain how you implemented the checklist above step-by-step (not just following the tutorial)
+
+1. Install Compressor and Tailwind into Django
+    
+    We need to install Compressor to compress the html and js file with
+
+    ```
+    python -m pip install django-compressor
+
+    ```
+
+    Then we put `compressor` inside `INSTALLED_APPS` inside `settings.py`
+
+    To install Tailwind into Django there's a couple of steps. First we need to Run the following command the install Tailwind CSS as a dev dependency using NPM:
+
+    ```
+    npm install -D tailwindcss
+    ```
+
+    then we create a new `tailwind.config.json` file with this command:
+
+    ```
+    npx tailwindcss init
+    ```
+
+    inside `tailwind.config.json` we put `'./library_col/**/*.{html,js}', './static/**/*.{html,js}', './templates/**/*.{html,js}', './main/**/*.{html,js}'` inside the content list. Next we create new folder name `static` in root directory with folder `css` and `src` inside of it. Inside `src` we create file `input.css` the we put these code inside of it
+    
+    ```css
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    ```
+
+    inside `package.json` we add
+
+    ``` json
+    "scripts": {
+    "dev": "tailwindcss -i static/src/input.css -o static/css/output.css --watch"
+     }
+    ```
+
+    then we put thses lines of command inside `base.html` inside `head` class below meta block
+    ```html
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    {% endcompress %}
+    ```
+
+    Then we run the command `npm run dev` to start tailwind.
+
+2. Customize `main.html`
+
+    ```html
+    {% extends 'base.html' %}
+    {% block content %}
+    <div class="">
+        <nav class="bg-gray-800">
+            <div class="mx-auto">
+                <div class="relative flex h-16 items-center justify-between">
+                    <div class="flex space-x-4 justify-start">
+                        <a href="{% url 'main:show_main' %}" class=" text-white rounded-md px-4 py-2 text-sm font-medium text-xl">
+                            {{ app_name }}
+                        </a>
+                    </div>
+                    <div class="relative px-3 py-3">
+                        <a href="{% url 'main:logout' %}" class="py-2 text-sm font-medium rounded-md pl-20">
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                                Logout
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="mx-auto relative py-4 px-4 pb-20 text-center">
+            <h1 class="text-3xl font-bold">Hello There</h1>
+            <h1 class="text-7xl font-bold pr-2">{{ username }}!</h1> <!-- Change it to your name -->
+            <h1 class="text-xl ">From Class {{ class }}</h5>
+        </div> 
+        <div class="px-4 pb-4 flex">
+            <a href="{% url 'main:create_product' %}">
+                <button class="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-1 rounded-full">
+                    Add New Book to Collection
+                </button>
+            </a>
+            <p class="px-4 pt-2">You have saved {{ item_count }} books in this application</p>
+        </div>
+        <div class="relative flex"> 
+        {% for item in items %}
+            <div class="px-4 w-72">
+            {% if forloop.last %}
+            <div class=" max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-blue-900 dark:border-blue-900">
+                <h5 class="font-bold text-xl py-2">{{item.name}}</h5>
+                <p class="pb-2">Category: {{item.categories}}</p>
+                <p class="">Description: </p>
+                <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                    <p >{{item.description}}</p>
+                </div>
+                <p class="py-2">Amount: </p>
+                <div class="relative flex">
+                    <p class="pr-16 pt-1.5">{{item.amount}}</p>
+                    <form method="post" class="">
+                        {% csrf_token %}
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="{{ item.id }}">
+                            +
+                        </button>
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="{{ item.id }}">
+                            -
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="{{ item.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                <p class="pt-4 text-[12px]">Date Added: {{item.date_added}}</p>
+                
+            </div>
+            {% else %}
+                <div class=" max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <h5 class="font-bold text-xl py-2">{{item.name}}</h5>
+                    <p class="pb-2">Category: {{item.categories}}</p>
+                    <p class="">Description: </p>
+                    <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                        <p >{{item.description}}</p>
+                    </div>
+                    <p class="py-2">Amount: </p>
+                    <div class="relative flex">
+                        <p class="pr-16 pt-1.5">{{item.amount}}</p>
+                        <form method="post" class="">
+                            {% csrf_token %}
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="{{ item.id }}">
+                                +
+                            </button>
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="{{ item.id }}">
+                                -
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="{{ item.id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                    <p class="pt-4 text-[12px]">Date Added: {{item.date_added}}</p>
+                    
+                </div>
+            {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <br />
+        <div class="px-4 pt-20 text-center">
+            <h5 class="text-sm">Last login session: {{ last_login }}</h5>
+        </div>
+    </div>
+
+    {% endblock content %}
+
+    ```
+
+3. Customize `register.html`
+
+    ```html
+    {% extends 'base.html' %}
+
+    {% block meta %}
+        <title>Register</title>
+    {% endblock meta %}
+
+    {% block content %}  
+
+
+    <div class="login flex h-screen justify-center items-center">
+        <div class=" flex-col item-center justify-center max-w-sm relative">
+            <div class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <h1 class="text-center text-4xl pb-3 pt-2">Register</h1>
+                <form class="py-2 px-2"  method="POST" action="">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td class="text-[19px] ">Username: </td>
+                            <td class="px-2 text-black"><input type="text" name="username" placeholder="Username" class="form-control"></td>
+                        </tr>
+                                
+                        <tr>
+                            <td class="text-xl">Password: </td>
+                            <td class="px-2 text-black"><input type="password" name="password1" placeholder="Password" class="form-control"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="text-[10.5px]"> Confirm Password: </td>
+                            <td class="px-2 text-black"><input type="password" name="password2" placeholder=" Confirm Password" class="form-control"></td>
+                        </tr>
+            
+                        <tr>
+                            <td></td>
+                            <td class="py-2"><input class="btn login_btn bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-3 mx-1 rounded-full" type="submit" value="Register"></td>
+                        </tr>
+                    </table>
+                </form>     
+                <p class="text-sm">Already have an account? <a class="underline underline-offset-2 hover:text-blue-400" href="{% url 'main:login' %}">Login Now</a></p>    
+            </div>
+            <div class="my-2 absolute flex items-center justify-center">
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li class="px-2 text-sm text-center">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if form.errors.username %}
+                    <ul>
+                        <li class=" px-2 text-sm text-center ">{{ form.errors.username }}</li>
+                    </ul>
+                {% endif %}        
+                {% if form.errors.password1 %}
+                    <ul>
+                        <li class=" px-2 text-sm text-center">{{ form.errors.password1 }}</li>
+                    </ul>
+                {% endif %}        
+                {% if form.errors.password2 %}
+                    <ul>
+                        <li class="px-2 text-sm text-center">{{ form.errors.password2 }}</li>
+                    </ul>
+                {% endif %}   
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock content %}
+    ```
+
+4. Customize `login.html`
+
+    ```html
+    {% extends 'base.html' %}
+
+    {% block meta %}
+        <title>Login</title>
+    {% endblock meta %}
+
+    {% block content %}
+
+    <div class="login flex h-screen justify-center items-center">
+        <div class="flex-col item-center justify-center max-w-sm relative">
+            <div class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <h1 class="text-center text-4xl pb-3 pt-2">Login</h1>
+                <form class="py-2 px-2"  method="POST" action="">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td class="text-[19px] ">Username: </td>
+                            <td class="px-2 text-black"><input type="text" name="username" placeholder="Username" class="form-control"></td>
+                        </tr>
+                                
+                        <tr>
+                            <td class="text-xl">Password: </td>
+                            <td class="px-2 text-black"><input type="password" name="password" placeholder="Password" class="form-control"></td>
+                        </tr>
+            
+                        <tr>
+                            <td></td>
+                            <td class="py-2"><input class="btn login_btn bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-3 mx-1 rounded-full" type="submit" value="Login"></td>
+                        </tr>
+                    </table>
+                </form> 
+                <p class="text-sm">Don't have an account yet? <a class="underline underline-offset-2 hover:text-blue-400" href="{% url 'main:register' %}">Register Now</a></p>
+            </div>
+            <div class="my-2 absolute flex items-center justify-center">
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li class="px-2 text-sm text-center">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}    
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock content %}
+    ```
+
+5. Customize `create_product.html`
+
+    ```html
+    {% extends 'base.html' %} 
+
+    {% block content %}
+
+    <div class="login flex h-screen justify-center items-center">
+        <div class="flex-col item-center justify-center relative">
+            <div class=" p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <h1 class="text-center text-4xl pb-3 pt-2">Add New Book</h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-4 gap-2">
+                        <label for="id_name" class="font-medium">Name:</label>
+                        <input type="text" name="name" maxlength="100" required id="id_name" class="form-control text-black">
+                        <label for="id_amount" class="font-medium">Amount:</label>
+                        <input type="text" name="amount" required id="id_amount" class="form-control text-black ">
+                        <label for="id_amount" class="font-medium">Description:</label>
+                        <textarea name="description" cols="40" rows="10" required id="id_description" class="form-control text-black "></textarea>
+                        <label for="id_category" class="font-medium">Category:</label>
+                        <input type="text" name="categories" maxlength="100" required id="id_category" class="form-control text-black ">
+                    </div>
+                    <div class="mr-5 py-2 pt-4">
+                        <input class="btn login_btn bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full" type="submit" value="Add Book">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+    ```
+
+6. Customize web scroll bar
+    
+    To customize the scrollbar i put some line of codes inside `input.css`
+
+    ```css
+    @layer utilities {
+        .scrollbar::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        }
+    
+        .scrollbar::-webkit-scrollbar-track {
+        border-radius: 100vh;
+        background: #f7f4ed;
+        }
+    
+        .scrollbar::-webkit-scrollbar-thumb {
+        background: #111827;
+        border-radius: 100vh;
+        border: 1px solid #f6f7ed;
+        }
+    
+        .scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #1d4ed8;
+        }
+    }
+
+</details>
+    ```
+
+

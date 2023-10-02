@@ -1,17 +1,21 @@
+{% load compress %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        {% block meta %}
         <meta charset="UTF-8" />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        {% block meta %}
         {% endblock meta %}
+        {% compress css %}
+        <link rel="stylesheet" href="{% static 'css/output.css' %}">
+        {% endcompress %}
     </head>
 
-    <body>
+    <body class="bg-gray-900 text-white " >
         {% block content %}
         {% endblock content %}
     </body>

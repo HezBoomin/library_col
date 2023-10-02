@@ -1,65 +1,106 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1>{{ app_name }}</h1>
+<div class="">
+    <nav class="bg-gray-800">
+        <div class="mx-auto">
+            <div class="relative flex h-16 items-center justify-between">
+                <div class="flex space-x-4 justify-start">
+                    <a href="{% url 'main:show_main' %}" class=" text-white rounded-md px-4 py-2 text-sm font-medium text-xl">
+                        {{ app_name }}
+                    </a>
+                </div>
+                <div class="relative px-3 py-3">
+                    <a href="{% url 'main:logout' %}" class="py-2 text-sm font-medium rounded-md pl-20">
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            Logout
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<h5>Name:</h5>
-<p>{{ username }}</p> <!-- Change it to your name -->
-
-<h5>Class:</h5>
-<p>{{ class }}</p> <!-- Change it to your class -->
-
-<p>You have saved {{ item_count }} books in this application</p> 
-
-
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Amount</th>
-        <th>Description</th>
-        <th>Category</th>
-        <th>Date Added</th>
-    </tr>
-
+    <div class="mx-auto relative py-4 px-4 pb-20 text-center">
+        <h1 class="text-3xl font-bold">Hello There</h1>
+        <h1 class="text-7xl font-bold pr-2">{{ username }}!</h1> <!-- Change it to your name -->
+        <h1 class="text-xl ">From Class {{ class }}</h5>
+    </div> 
+    <div class="px-4 pb-4 flex">
+        <a href="{% url 'main:create_product' %}">
+            <button class="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-1 rounded-full">
+                Add New Book to Collection
+            </button>
+        </a>
+        <p class="px-4 pt-2">You have saved {{ item_count }} books in this application</p>
+    </div>
+    <div class="relative flex"> 
     {% for item in items %}
-        <tr>
-            <td>{{item.name}}</td>
-            <td>{{item.amount}}</td>
-            <td>{{item.description}}</td>
-            <td>{{item.categories}}</td>
-            <td>{{item.date_added}}</td>
-            <td>
-                <form method="post">
+        <div class="px-4 w-72">
+        {% if forloop.last %}
+        <div class=" max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-blue-900 dark:border-blue-900">
+            <h5 class="font-bold text-xl py-2">{{item.name}}</h5>
+            <p class="pb-2">Category: {{item.categories}}</p>
+            <p class="">Description: </p>
+            <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                <p >{{item.description}}</p>
+            </div>
+            <p class="py-2">Amount: </p>
+            <div class="relative flex">
+                <p class="pr-16 pt-1.5">{{item.amount}}</p>
+                <form method="post" class="">
                     {% csrf_token %}
-                    <button type="submit" name="increment" value="{{ item.id }}">
-                        Increment Amount
+                    <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="{{ item.id }}">
+                        +
                     </button>
-                    <button type="submit" name="decrement" value="{{ item.id }}">
-                        Decrease Amount
-                    </button>
-                    <button type="submit" name="delete" value="{{ item.id }}">
-                        Delete Item
+                    <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="{{ item.id }}">
+                        -
+                    <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="{{ item.id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                          </svg>
                     </button>
                 </form>
-            </td>
-        </tr>
-    {% endfor %}
-</table>
+            </div>
+            <p class="pt-4 text-[12px]">Date Added: {{item.date_added}}</p>
+            
+        </div>
+        {% else %}
+            <div class=" max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <h5 class="font-bold text-xl py-2">{{item.name}}</h5>
+                <p class="pb-2">Category: {{item.categories}}</p>
+                <p class="">Description: </p>
+                <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                    <p >{{item.description}}</p>
+                </div>
+                <p class="py-2">Amount: </p>
+                <div class="relative flex">
+                    <p class="pr-16 pt-1.5">{{item.amount}}</p>
+                    <form method="post" class="">
+                        {% csrf_token %}
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="{{ item.id }}">
+                            +
+                        </button>
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="{{ item.id }}">
+                            -
+                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="{{ item.id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                              </svg>
+                        </button>
+                    </form>
+                </div>
+                <p class="pt-4 text-[12px]">Date Added: {{item.date_added}}</p>
+                
+            </div>
+        {% endif %}
+        </div>
+        {% endfor %}
+    </div>
 
-<br />
-
-<h5>Last login session: {{ last_login }}</h5>
-
-<a href="{% url 'main:create_product' %}">
-    <button>
-        Add New Book to Collection
-    </button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-    <button>
-        Logout
-    </button>
-</a>
+    <br />
+    <div class="px-4 pt-20 text-center">
+        <h5 class="text-sm">Last login session: {{ last_login }}</h5>
+    </div>
+</div>
 
 {% endblock content %}
