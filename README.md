@@ -587,7 +587,7 @@ Tailwind is a css framework with extensive flexiblity and freedom. It's offer a 
                 <h1 class="text-center text-4xl pb-3 pt-2">Add New Book</h1>
                 <form method="POST">
                     {% csrf_token %}
-                    <div class="grid grid-cols-4 gap-2">
+                    <div class="grid grid-cols-1 gap-2">
                         <label for="id_name" class="font-medium">Name:</label>
                         <input type="text" name="name" maxlength="100" required id="id_name" class="form-control text-black">
                         <label for="id_amount" class="font-medium">Amount:</label>
