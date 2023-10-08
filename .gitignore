@@ -137,4 +137,4 @@ GitHub.sublime-settings
 .history
 
 # Tailwind Cache
-.static/CACHE/
+.static/CACHE/css/
