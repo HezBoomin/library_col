@@ -11,12 +11,15 @@
         />
         {% endblock meta %}
         <title>Book Collection</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha384-S58meLBGKxIiQmJ/pJ8ilvFUcGcqgla+mWH9EEKGm6i6rKxSTA2kpXJQJ8n7XK4w" crossorigin="anonymous"></script>
         {% compress css %}
         <link rel="stylesheet" href="{% static 'css/output.css' %}">
         {% endcompress %}
     </head>
 
-    <body class="bg-gray-900 text-white " >
+    <body class="bg-gray-900 text-white"  >
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
         {% block content %}
         {% endblock content %}
     </body>

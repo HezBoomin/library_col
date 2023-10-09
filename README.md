@@ -257,7 +257,7 @@ Cookies themselves are not inherently secure or insecure; their security depends
 
 </details>
 
-<details open>
+<details>
 <summary>Assignment 5</summary>
 
 # Assignment 5
@@ -634,6 +634,23 @@ Tailwind is a css framework with extensive flexiblity and freedom. It's offer a 
         background: #1d4ed8;
         }
     }
+
+</details>
+
+<details open>
+<summary>Assignment 6</summary>
+
+# Assignment 6
+
+## Answers
+
+### Explain the difference between asynchronous programming and synchronous programming.
+
+Synchronous programming executes tasks sequentially and blocks the program when waiting for slow operations, while asynchronous programming allows for concurrent execution and non-blocking behavior.
+
+### In the implementation of JavaScript and AJAX, there is an implemented paradigm called the event-driven programming paradigm. Explain what this paradigm means and give one example of its implementation in this assignment.
+
+Event-driven programming paradigm is a programming paradigm where the flow of a program is determined by events that occur during its execution. 
 
 </details>
 

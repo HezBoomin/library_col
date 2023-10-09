@@ -26,76 +26,12 @@
         <h1 class="text-xl ">From Class {{ class }}</h5>
     </div> 
     <div class="px-4 pb-4 flex">
-        <a href="{% url 'main:create_product' %}">
-            <button class="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-1 rounded-full">
-                Add New Book to Collection
-            </button>
-        </a>
+        <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" type="button" class="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-1 rounded-full">
+            Add New Book to Collection
+        </button>
         <p class="px-4 pt-2">You have saved {{ item_count }} books in this application</p>
     </div>
-    <div class="relative flex"> 
-    {% for item in items %}
-        <div class="px-4 w-72">
-        {% if forloop.last %}
-        <div class=" max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-blue-900 dark:border-blue-900">
-            <h5 class="font-bold text-xl py-2">{{item.name}}</h5>
-            <p class="pb-2">Category: {{item.categories}}</p>
-            <p class="">Description: </p>
-            <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
-                <p >{{item.description}}</p>
-            </div>
-            <p class="py-2">Amount: </p>
-            <div class="relative flex">
-                <p class="pr-16 pt-1.5">{{item.amount}}</p>
-                <form method="post" class="">
-                    {% csrf_token %}
-                    <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="{{ item.id }}">
-                        +
-                    </button>
-                    <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="{{ item.id }}">
-                        -
-                    <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="{{ item.id }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                          </svg>
-                    </button>
-                </form>
-            </div>
-            <p class="pt-4 text-[12px]">Date Added: {{item.date_added}}</p>
-            
-        </div>
-        {% else %}
-            <div class=" max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <h5 class="font-bold text-xl py-2">{{item.name}}</h5>
-                <p class="pb-2">Category: {{item.categories}}</p>
-                <p class="">Description: </p>
-                <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
-                    <p >{{item.description}}</p>
-                </div>
-                <p class="py-2">Amount: </p>
-                <div class="relative flex">
-                    <p class="pr-16 pt-1.5">{{item.amount}}</p>
-                    <form method="post" class="">
-                        {% csrf_token %}
-                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="{{ item.id }}">
-                            +
-                        </button>
-                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="{{ item.id }}">
-                            -
-                        <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="{{ item.id }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                              </svg>
-                        </button>
-                    </form>
-                </div>
-                <p class="pt-4 text-[12px]">Date Added: {{item.date_added}}</p>
-                
-            </div>
-        {% endif %}
-        </div>
-        {% endfor %}
-    </div>
+    <div id="product_card" class="relative flex " ></div>
 
     <br />
     <div class="px-4 pt-20 text-center">
@@ -103,4 +39,150 @@
     </div>
 </div>
 
+<div id="authentication-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-md max-h-full">
+        <div class="relative p-4 border border-gray-200 rounded-lg shadow bg-gray-800">
+            <h1 class="text-center text-2xl py-2">Add New Book</h1>
+            <form id="form" onsubmit="return false;">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 gap-2">
+                    <label for="id_name" class="font-normal">Name:</label>
+                    <input type="text" name="name" maxlength="100" required id="id_name" class="form-control  text-black">
+                    <label for="id_amount" class="font-normal">Amount:</label>
+                    <input type="text" name="amount" required id="id_amount" class="form-control text-black ">
+                    <label for="id_amount" class="font-normal">Description:</label>
+                    <textarea name="description" cols="40" rows="3" required id="id_description" class="form-control text-black "></textarea>
+                    <label for="id_category" class="font-normal">Category:</label>
+                    <input type="text" name="categories" maxlength="100" required id="id_category" class="form-control text-black ">
+                </div>
+                <div class="mr-5 py-2 pt-4">
+                    <button class=" bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full" type="submit" id="button_add" data-modal-hide="authentication-modal">Add Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    async function getProducts() {
+        return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+    }
+
+    async function refreshProducts() {
+        document.getElementById("product_card").innerHTML = ""
+        const items = await getProducts()
+        let htmlString = "";
+        items.forEach((item, index) => {
+            const isLastItem = index === items.length - 1;
+            if (!isLastItem){
+
+            htmlString += `
+            <div  class="px-4 w-72">
+                <div  class=" max-w-sm p-4  border border-gray-200 rounded-lg shadow bg-gray-800 border-gray-700">
+                    <h5 class="font-bold text-xl py-2">${item.fields.name}</h5>
+                    <p class="pb-2">Category: ${item.fields.categories}</p>
+                    <p class="">Description: </p>
+                    <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                        <p >${item.fields.description}</p>
+                    </div>
+                    <p class="py-2">Amount: </p>
+                    <div class="relative flex">
+                        <p class="pr-16 pt-1.5">${item.fields.amount}</p>
+                        <form method="post" class="">
+                            {% csrf_token %}
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="${item.pk}">
+                                +
+                            </button>
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="${item.pk}">
+                                -
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="${item.pk}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                    <p class="pt-4 text-[12px]">Date Added: ${item.fields.date_added}</p>
+                    
+                </div>
+            </div>
+            `
+            }
+            else {
+                htmlString += `
+                <div class="px-4 w-72">
+                    <div class=" max-w-sm p-4 border border-gray-200 rounded-lg shadow bg-blue-900 border-blue-900">
+                        <h5 class="font-bold text-xl py-2">${item.fields.name}</h5>
+                        <p class="pb-2">Category: ${item.fields.categories}</p>
+                        <p class="">Description: </p>
+                        <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                            <p >${item.fields.description}</p>
+                        </div>
+                        <p class="py-2">Amount: </p>
+                        <div class="relative flex">
+                            <p class="pr-16 pt-1.5">${item.fields.amount}</p>
+                            <form method="post" class="">
+                                {% csrf_token %}
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="${item.pk}">
+                                    +
+                                </button>
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="${item.pk}">
+                                    -
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="${item.pk}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                        <p class="pt-4 text-[12px]">Date Added: ${item.fields.date_added}</p>
+                        
+                    </div>
+                </div>
+                ` 
+            }
+        })
+
+        
+        document.getElementById("product_card").innerHTML = htmlString
+    }
+
+    refreshProducts()
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    document.getElementById("button_add").onclick = addProduct
+
+</script>
+
+
 {% endblock content %}
+
+
+<!-- 
+<h1 class="text-center text-2xl py-2">Add New Book</h1>
+<form id="form" onsubmit="return false;">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-2">
+        <label for="id_name" class="font-normal">Name:</label>
+        <input type="text" name="name" maxlength="100" required id="id_name" class="form-control  text-black">
+        <label for="id_amount" class="font-normal">Amount:</label>
+        <input type="text" name="amount" required id="id_amount" class="form-control text-black ">
+        <label for="id_amount" class="font-normal">Description:</label>
+        <textarea name="description" cols="40" rows="3" required id="id_description" class="form-control text-black "></textarea>
+        <label for="id_category" class="font-normal">Category:</label>
+        <input type="text" name="categories" maxlength="100" required id="id_category" class="form-control text-black ">
+    </div>
+    <div class="mr-5 py-2 pt-4">
+        <button class=" bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full" type="submit" id="button_add">Add Book</button>
+    </div>
+</form> -->
