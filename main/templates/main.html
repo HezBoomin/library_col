@@ -66,6 +66,8 @@
 
 
 <script>
+
+
     async function getProducts() {
         return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
     }
@@ -90,14 +92,14 @@
                     <p class="py-2">Amount: </p>
                     <div class="relative flex">
                         <p class="pr-16 pt-1.5">${item.fields.amount}</p>
-                        <form method="post" class="">
+                        <form onsubmit="return false;" class="">
                             {% csrf_token %}
-                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="${item.pk}">
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " onclick="incrementProduct(${item.pk})" >
                                 +
                             </button>
-                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="${item.pk}">
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" onclick="decrementProduct(${item.pk})" >
                                 -
-                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="${item.pk}">
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full delete-button"  onclick="deleteProduct(${item.pk})" >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                 </svg>
@@ -123,14 +125,14 @@
                         <p class="py-2">Amount: </p>
                         <div class="relative flex">
                             <p class="pr-16 pt-1.5">${item.fields.amount}</p>
-                            <form method="post" class="">
+                            <form onsubmit="return false;" class="">
                                 {% csrf_token %}
-                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " type="submit" name="increment" value="${item.pk}">
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full "  onclick="incrementProduct(${item.pk})">
                                     +
                                 </button>
-                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" type="submit" name="decrement" value="${item.pk}">
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full"  onclick="decrementProduct(${item.pk})">
                                     -
-                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full" type="submit" name="delete" value="${item.pk}">
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full"  onclick="deleteProduct(${item.pk})">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                         <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                                     </svg>
@@ -141,12 +143,12 @@
                         
                     </div>
                 </div>
-                ` 
+                ` ;
             }
-        })
 
-        
+        })
         document.getElementById("product_card").innerHTML = htmlString
+        
     }
 
     refreshProducts()
@@ -160,29 +162,38 @@
         return false
     }
 
+
+    function deleteProduct(id) {
+        fetch("/delete-item-ajax/" + id + "/", {
+            method: "POST"
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    function incrementProduct(id) {
+        fetch("/increment-item-ajax/" + id + "/", {
+            method: "POST"
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    function decrementProduct(id) {
+        fetch("/decrement-item-ajax/" + id + "/", {
+            method: "POST"
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
     document.getElementById("button_add").onclick = addProduct
+
 
 </script>
 
 
 {% endblock content %}
-
-
-<!-- 
-<h1 class="text-center text-2xl py-2">Add New Book</h1>
-<form id="form" onsubmit="return false;">
-    {% csrf_token %}
-    <div class="grid grid-cols-1 gap-2">
-        <label for="id_name" class="font-normal">Name:</label>
-        <input type="text" name="name" maxlength="100" required id="id_name" class="form-control  text-black">
-        <label for="id_amount" class="font-normal">Amount:</label>
-        <input type="text" name="amount" required id="id_amount" class="form-control text-black ">
-        <label for="id_amount" class="font-normal">Description:</label>
-        <textarea name="description" cols="40" rows="3" required id="id_description" class="form-control text-black "></textarea>
-        <label for="id_category" class="font-normal">Category:</label>
-        <input type="text" name="categories" maxlength="100" required id="id_category" class="form-control text-black ">
-    </div>
-    <div class="mr-5 py-2 pt-4">
-        <button class=" bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full" type="submit" id="button_add">Add Book</button>
-    </div>
-</form> -->

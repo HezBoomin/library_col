@@ -650,7 +650,241 @@ Synchronous programming executes tasks sequentially and blocks the program when 
 
 ### In the implementation of JavaScript and AJAX, there is an implemented paradigm called the event-driven programming paradigm. Explain what this paradigm means and give one example of its implementation in this assignment.
 
-Event-driven programming paradigm is a programming paradigm where the flow of a program is determined by events that occur during its execution. 
+Event-driven programming paradigm is a programming paradigm where the flow of a program is determined by events that occur during its execution. One of the implementation in this assignment is when we try to add new item and update the display of books without refreshing the page. in code `document.getElementById("button_add").onclick = addProduct;`, `document.getElementById("button_add")`try to get the ID `button_add`, which is the button inside the form. `.onclick` is an event handler that specifies what should happen when the button is clicked. `addProduct` is a JavaScript function defined earlier in the code that is responsible for making an asynchronous request to add a new book to the collection and refreshing the display of books.
+
+### Explain the implementation of asynchronous programming in AJAX.
+
+Asynchronous programming in AJAX allows web applications to make HTTP requests to a server and receive data without blocking the main execution thread of the browser. This enables web pages to remain responsive and update their content dynamically without requiring full page reloads.
+
+### In this semester, the implementation of AJAX is done using the Fetch API rather than the jQuery library. Compare the two technologies and write down your opinion which technology is better to use.
+
+There's some difference between Fetch API and jQuery library. Fetch API is native to Javascript and more lightweight and has a smaller footprint compared to jQuery, while JQuery is a JavaScript library that provides a wide range of utilities and features. In JQuery there are some utilities that are not needed in AJAX making it more redundant. Fetch API also uses a simple and consistent syntax for making requests and handling responses, while JQuery syntax are more more verbose and less intuitive. In my opinion Fetch API is better to use for AJAX. It is more modern, lightweighted, and the syntax are more simple and consistent if we compare it to JQuery.
+
+### Explain how you implemented the checklist above step-by-step (not just following the tutorial).
+
+1. Install Flowbite for the modal
+
+    Install Flowbite as a dependency using NPM:
+    ```
+    npm install flowbite`
+    ```
+
+    Put `require('flowbite/plugin')` as a plugin inside the `tailwind.config.js` file
+
+    Include `./node_modules/flowbite/**/*.js` inside the content value of the `tailwind.config.js`
+
+    Include Flowbite’s JavaScript file inside the _base.html file just before the end of the <body> tag using CDN:
+    ```js
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    ```
+
+2. Create New Function inside `views.py` to Return Data as JSON
+
+    Create new function called `get_product_json` as following:
+    ```py
+    def get_product_json(request):
+    product_item = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+    ```
+    Then do the routing inside `urls.py`
+
+3. Create New Function inside `views.py` to Add Product using AJAX
+
+    First we import from `django.views.decorators.csrf` import csrf_exempt in views.py, then we create new function `add_product_ajax`:
+
+    ```py
+    @csrf_exempt
+    def add_product_ajax(request):
+        if request.method == 'POST':
+            name = request.POST.get("name")
+            amount= request.POST.get("amount")
+            description = request.POST.get("description")
+            categories = request.POST.get("categories")
+            user = request.user     
+            new_item = Item(name=name, amount=amount, description=description, user=user, categories=categories)
+            new_item.save()
+
+            return HttpResponse(b"CREATED", status=201)
+
+        return HttpResponseNotFound()
+    ```
+    Then do the routing inside `urls.py`
+
+4. Show the Product using `fetch()` API
+
+    Delete the existing div to show the data and replace it with `<div id="product_card" class="relative flex " ></div>`. Then put `<script>` tag block at the bottom of the code( before `{% endblock content %}`) and create a async function:
+    ```js
+    async function getProducts() {
+        return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+    }
+    ```
+
+    Still inside the `<scripts>` tag block called `refreshProduct()` we create new async function to show the item and refresh the items data asynchronously as following:
+    ```js
+    async function refreshProducts() {
+        document.getElementById("product_card").innerHTML = ""
+        const items = await getProducts()
+        let htmlString = "";
+        items.forEach((item, index) => {
+            const isLastItem = index === items.length - 1;
+            if (!isLastItem){
+
+            htmlString += `
+            <div  class="px-4 w-72">
+                <div  class=" max-w-sm p-4  border border-gray-200 rounded-lg shadow bg-gray-800 border-gray-700">
+                    <h5 class="font-bold text-xl py-2">${item.fields.name}</h5>
+                    <p class="pb-2">Category: ${item.fields.categories}</p>
+                    <p class="">Description: </p>
+                    <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                        <p >${item.fields.description}</p>
+                    </div>
+                    <p class="py-2">Amount: </p>
+                    <div class="relative flex">
+                        <p class="pr-16 pt-1.5">${item.fields.amount}</p>
+                        <form onsubmit="return false;" class="">
+                            {% csrf_token %}
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full " onclick="incrementProduct(${item.pk})" >
+                                +
+                            </button>
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full" onclick="decrementProduct(${item.pk})" >
+                                -
+                            <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full delete-button"  onclick="deleteProduct(${item.pk})" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                    <p class="pt-4 text-[12px]">Date Added: ${item.fields.date_added}</p>
+                    
+                </div>
+            </div>
+            `
+            }
+            else {
+                htmlString += `
+                <div class="px-4 w-72">
+                    <div class=" max-w-sm p-4 border border-gray-200 rounded-lg shadow bg-blue-900 border-blue-900">
+                        <h5 class="font-bold text-xl py-2">${item.fields.name}</h5>
+                        <p class="pb-2">Category: ${item.fields.categories}</p>
+                        <p class="">Description: </p>
+                        <div class=" overflow-y-auto max-h-6 pb-10 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-900 scrollbar-medium" >
+                            <p >${item.fields.description}</p>
+                        </div>
+                        <p class="py-2">Amount: </p>
+                        <div class="relative flex">
+                            <p class="pr-16 pt-1.5">${item.fields.amount}</p>
+                            <form onsubmit="return false;" class="">
+                                {% csrf_token %}
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full "  onclick="incrementProduct(${item.pk})">
+                                    +
+                                </button>
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 mx-1 rounded-full"  onclick="decrementProduct(${item.pk})">
+                                    -
+                                <button class="bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-2 mx-1 rounded-full"  onclick="deleteProduct(${item.pk})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                        <p class="pt-4 text-[12px]">Date Added: ${item.fields.date_added}</p>
+                        
+                    </div>
+                </div>
+                ` ;
+            }
+
+        })
+        document.getElementById("product_card").innerHTML = htmlString
+        
+    }
+    refreshProducts()
+    ```
+
+5. Create Modal Form to Add Item
+
+    for the modal I use flowbite as an extension of tailwind as the following:
+    ```js
+    <div id="authentication-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-md max-h-full">
+            <div class="relative p-4 border border-gray-200 rounded-lg shadow bg-gray-800">
+                <h1 class="text-center text-2xl py-2">Add New Book</h1>
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 gap-2">
+                        <label for="id_name" class="font-normal">Name:</label>
+                        <input type="text" name="name" maxlength="100" required id="id_name" class="form-control  text-black">
+                        <label for="id_amount" class="font-normal">Amount:</label>
+                        <input type="text" name="amount" required id="id_amount" class="form-control text-black ">
+                        <label for="id_amount" class="font-normal">Description:</label>
+                        <textarea name="description" cols="40" rows="3" required id="id_description" class="form-control text-black "></textarea>
+                        <label for="id_category" class="font-normal">Category:</label>
+                        <input type="text" name="categories" maxlength="100" required id="id_category" class="form-control text-black ">
+                    </div>
+                    <div class="mr-5 py-2 pt-4">
+                        <button class=" bg-gray-900 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-full" type="submit" id="button_add" data-modal-hide="authentication-modal">Add Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    ```
+
+    and below is the button:
+    ```html
+    <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" type="button"                 class="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-1 rounded-full">
+        Add New Book to Collection
+    </button>
+    ```
+
+6. Create a JS Function to Add an Item
+    
+    inside the `<script>` tag block we add a function to add an item using AJAX like the following:
+    ```js
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+    ```
+
+    Then we set the `addProduct()` function as as the onclick function of the modal's "Add Book" button:
+    ```js
+    document.getElementById("button_add").onclick = addProduct
+    ```
+    
+
+7. Bonus Part: Create a Delete Function using AJAX
+
+    inside `views.py` we create a `delete-item-ajax` function that have request and the user ID as the parameters to delete the Item by getting the ID of the Item. Here's the code:
+    ```py
+    @csrf_exempt
+    def delete_item_ajax(request, id):
+        item = Item.objects.get(pk=id)
+        item.delete()
+        return HttpResponse(b"DELETED", status=201)
+    ```
+
+    inside the `<script>` tag block we add a function to delete an item using AJAX like the following:
+    ```js
+        function deleteProduct(id) {
+        fetch("/delete-item-ajax/" + id + "/", {
+            method: "POST"
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+    ```
+
+    Inside HTML Tag `<button>` we add `onclick="deleteProduct(${item.pk})"` to execute the deleteProduct function with the parameter is the item Primary Key when the button is clicked. We also need to pu `onsubmit="return false;"` inside the `<form>` tag so the website doesn't refresh, instead the cards will be refreshed.
+
+8. Deployment
 
 </details>
 

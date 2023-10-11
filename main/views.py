@@ -117,6 +117,8 @@ def delete_item(request, id):
     return HttpResponseRedirect(reverse('main:show_main'))
 
 
+
+
 def get_product_json(request):
     product_item = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize('json', product_item))
@@ -135,3 +137,23 @@ def add_product_ajax(request):
         return HttpResponse(b"CREATED", status=201)
 
     return HttpResponseNotFound()
+
+@csrf_exempt
+def delete_item_ajax(request, id):
+    item = Item.objects.get(pk=id)
+    item.delete()
+    return HttpResponse(b"DELETED", status=201)
+
+@csrf_exempt
+def increment_item_ajax(request, id):
+    item = Item.objects.get(pk=id)
+    item.amount += 1
+    item.save()
+    return HttpResponse(b"DELETED", status=201)
+
+@csrf_exempt
+def decrement_item_ajax(request, id):
+    item = Item.objects.get(pk=id)
+    item.amount -= 1
+    item.save()
+    return HttpResponse(b"DELETED", status=201)
