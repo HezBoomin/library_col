@@ -9,7 +9,9 @@ ENV PYTHONUNBUFFERED=1 \
     WEB_CONCURRENCY=2
 
 # Install system packages required Django.
-RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+RUN apt-get update --yes --quiet \
+    && apt-get upgrade --yes --quiet \
+    && apt-get install --yes --quiet --no-install-recommends \
     && apt-get install nodejs -y \
     && apt install npm -y --fix-missing \
     && rm -rf /var/lib/apt/lists/* 
