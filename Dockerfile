@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-bookworm
 
 WORKDIR /app
 
@@ -11,7 +11,6 @@ ENV PYTHONUNBUFFERED=1 \
 # Install system packages required Django.
 RUN apt-get update --yes --quiet \
     && apt-get upgrade --yes --quiet \
-    && apt-get install --yes --quiet --no-install-recommends \
     && apt-get install nodejs -y \
     && apt install npm -y --fix-missing \
     && rm -rf /var/lib/apt/lists/* 
@@ -26,8 +25,8 @@ RUN pip install -r /requirements.txt
 # Copy project code
 COPY . .
 
+RUN npm run build
 RUN python manage.py collectstatic --noinput --clear
-RUN npm run dev
 
 # Run as non-root user
 RUN chown -R django:django /app
