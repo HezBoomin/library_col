@@ -138,3 +138,5 @@ GitHub.sublime-settings
 
 # Tailwind Cache
 static/CACHE/css/
+
+node_modules/
