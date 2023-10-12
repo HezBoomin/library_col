@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Install system packages required Django.
 RUN apt-get update --yes --quiet \
-    && apt-get upgrade --yes --quiet \
+    && apt-get install --yes --quiet --no-install-recommends \
     && apt-get install nodejs -y \
     && apt install npm -y --fix-missing \
     && rm -rf /var/lib/apt/lists/* 
@@ -21,6 +21,8 @@ RUN addgroup --system django \
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
+
+RUN npm install tailwindcss
 
 # Copy project code
 COPY . .
