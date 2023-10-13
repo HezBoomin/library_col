@@ -29,7 +29,7 @@
         <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" type="button" class="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-1 rounded-full">
             Add New Book to Collection
         </button>
-        <p class="px-4 pt-2">You have saved {{ item_count }} books in this application</p>
+        <p class="px-4 pt-2" id="item_count">You have saved ${items.length} books in this application</p>
     </div>
     <div id="product_card" class="relative flex " ></div>
 
@@ -147,6 +147,7 @@
             }
 
         })
+        document.getElementById("item_count").innerHTML = `You have saved ${items.length} books in this application`
         document.getElementById("product_card").innerHTML = htmlString
         
     }

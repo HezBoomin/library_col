@@ -24,6 +24,7 @@ RUN pip install -r /requirements.txt
 
 RUN npm install tailwindcss
 RUN npm install flowbite
+RUN npm install -D postcss postcss-cli
 
 # Copy project code
 COPY . .
